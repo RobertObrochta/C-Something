@@ -7,8 +7,10 @@
 #define QUIT "Quitting..."
 #define WINDOW_COLOR 4
 
+
 // TO COMPILE
 // gcc -o learning learning.c -lncurses
+
 
 int main(void){
 	WINDOW * win;
