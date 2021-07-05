@@ -1,39 +1,70 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <ncurses.h>
 
-int main(void)
-{
-	initscr();			/* Start curses mode */
+#define PLAYER '*'
+#define EMPTY ' '
+#define QUIT "Quitting..."
+#define WINDOW_COLOR 4
+
+// TO COMPILE
+// gcc -o learning learning.c -lncurses
+
+int main(void){
+	WINDOW * win;
+	win = initscr();
+	box(win, 0, 0);
+	start_color();
+	init_pair(1, COLOR_WHITE, COLOR_BLUE);
+	wbkgd(win, COLOR_PAIR(1));
+	cbreak();
 	int ch;
-	printw("Tap any key!\n");
+	int y = 1;
+	int x = 1;
 	keypad(stdscr, true);
 	int i = 1;
 
 	while (i == 1){
+		attron(COLOR_PAIR(1));
+		mvaddch(y, x, PLAYER);
+		refresh();
 		ch = getch();
+		attroff(COLOR_PAIR(1));
 		switch (ch){
 			case KEY_UP:
-				printw("Move up!\n");
+				if (y > 1){
+					mvaddch(y, x, EMPTY);
+					--y;
+				}
 				break;
 			case KEY_DOWN:
-				printw("Down Arrow!\n");
+				mvaddch(y, x, EMPTY);
+				++y;
 				break;
 			case KEY_LEFT:
-				printw("Going backwards, eh?\n");
+				if(x > 1){
+					mvaddch(y, x, EMPTY);
+					--x;
+				}
 				break;
 			case KEY_RIGHT:
-				printw("Time to progress...\n");
+				mvaddch(y, x, EMPTY);
+				++x;
+				break;
+			case ' ':
+				if (y > 3){
+					mvaddch(y, x, EMPTY);
+					y -= 3;
+				}
 				break;
 			case 27:
+				mvaddstr(y, x, QUIT);
+				refresh();
+				sleep(1.4);
+				i++;
 				break;
 			default:
-				printw("Hit something else!\n");
 				break;
-		}
-		
-		if (ch == 27){
-			printw("Quitting...\n");
-			++i; // breaks out of the while loop, closes the program
 		}
 	}
 	refresh();
