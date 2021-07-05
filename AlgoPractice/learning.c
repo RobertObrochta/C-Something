@@ -1,15 +1,20 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <ncurses.h>
+#include <string.h>
 
 #define PLAYER '*'
 #define EMPTY ' '
+#define LOG '='
 #define QUIT "Quitting..."
 #define WINDOW_COLOR 4
 
 
 // TO COMPILE
 // gcc -o learning learning.c -lncurses
+
+
 
 
 int main(void){
@@ -23,15 +28,16 @@ int main(void){
 	int ch;
 	int y = 1;
 	int x = 1;
+	int ymax, xmax;
+	getmaxyx(stdscr, ymax, xmax);
 	keypad(stdscr, true);
 	int i = 1;
 
 	while (i == 1){
-		attron(COLOR_PAIR(1));
+		int random = rand() % 4;
 		mvaddch(y, x, PLAYER);
 		refresh();
 		ch = getch();
-		attroff(COLOR_PAIR(1));
 		switch (ch){
 			case KEY_UP:
 				if (y > 1){
@@ -40,8 +46,10 @@ int main(void){
 				}
 				break;
 			case KEY_DOWN:
-				mvaddch(y, x, EMPTY);
-				++y;
+				if (y < ymax - 2){
+					mvaddch(y, x, EMPTY);
+					++y;
+				}
 				break;
 			case KEY_LEFT:
 				if(x > 1){
@@ -50,8 +58,10 @@ int main(void){
 				}
 				break;
 			case KEY_RIGHT:
-				mvaddch(y, x, EMPTY);
-				++x;
+				if (x < xmax - 2){
+					mvaddch(y, x, EMPTY);
+					++x;	
+				}
 				break;
 			case ' ':
 				if (y > 3){
