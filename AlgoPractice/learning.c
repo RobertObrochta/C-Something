@@ -30,6 +30,7 @@ int main(void)
 				printw("Hit something else!\n");
 				break;
 		}
+		
 		if (ch == 27){
 			printw("Quitting...\n");
 			++i; // breaks out of the while loop, closes the program
